@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnCapture;
     private Button btnSubmit;
     private ImageView ivPostImage;
+    private Button btnLogout;
     private File photoFile;
     public String photoFileName = "photo.jpg";
     public static final String TAG="MainActivity";
@@ -42,11 +43,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        btnLogout = findViewById(R.id.btnLogout);
         etDescription=findViewById(R.id.etDescription);
         btnCapture = findViewById(R.id.btnCapture);
         btnSubmit = findViewById(R.id.btnSubmit);
         ivPostImage = findViewById(R.id.ivPostImage);
         //queryPost();
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Logout();
+            }
+        });
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +77,13 @@ public class MainActivity extends AppCompatActivity {
                 launchCamera();
             }
         });
+    }
+
+    private void Logout() {
+        ParseUser.logOut();
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 
     private void launchCamera() {
@@ -120,9 +135,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Return the file target for the photo based on filename
-        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+        return new File(mediaStorageDir.getPath() + File.separator + fileName);
 
-        return file;
+
     }
 
     private void savePost(String description, ParseUser currentUser, File photoFile) {
